@@ -29,7 +29,7 @@ fn is_truncatable_prime(x: usize) -> bool {
   let (mut left, mut right, mut order) = split(x, 0, 1);
   while left > 0 && right != x {
     if !is_prime(left as u64) || !is_prime(right as u64) { return false };
-    (new_left, new_right, new_order) = split(left, right, order);
+    let (new_left, new_right, new_order) = split(left, right, order);
     left = new_left;
     right = new_right;
     order = new_order;
