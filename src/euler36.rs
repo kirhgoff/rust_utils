@@ -37,6 +37,7 @@ impl Iterator for DigitsGenerator {
     }
 }
 
+// TODO: extract as crate
 fn mod_rem(number:u32, divider:u32) -> (u32, u32) {
   (number / divider as u32, number % divider as u32)
 }

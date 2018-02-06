@@ -5,3 +5,4 @@ authors = ["Kirill Lastovirya <kirill.lastovirya@gmail.com>"]
 
 [dependencies]
 fraction = "0.3.7"
+primal = "0.2"
