@@ -43,7 +43,8 @@ pub fn euler37() {
         .take(11)
         .collect::<Vec<usize>>();
 
-    println!("{:?}", primes)
+    println!("{:?}", primes);
+    println!("{}", primes.iter().sum::<usize>())
 }
 
 #[cfg(test)]
