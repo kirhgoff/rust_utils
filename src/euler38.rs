@@ -25,32 +25,27 @@ fn digits_count(number:u64) -> u64 {
   return (number as f64).log10().abs() as u64 + 1;
 }
 
-fn join(products:Vec<u64>) -> u64 {
-  return products.iter()
-    .scan((1u64, 1u64), |&mut (ref mut order, ref mut next), &x| {
-      let addition: u64 = 10u64.pow(digits_count(x) as u32);
-      let old_next = *next;
-      *next = *order;
-      *order = old_next * addition;
-      print!("\nscanning: x={} order={} next={}", x, order, next);
-      Some((*order, *next))
-    })
-
-    // (1, 1)
-    // (1000, 1)
-    // (1000000, 1000)
-    .zip(products.iter().rev())
-    .fold(0 as u64, |sum, ((&mut (ref mut order, ref mut next)), &x)| sum + order * x);
+fn join(products:&Vec<u64>) -> u64 {
+  return products.iter().fold(0, |sum, &x| sum * 10u64.pow(digits_count(x) as u32) + x);
 }
 
 pub fn euler38() {
   let max_length = 9;
+  let mut max = 0;
   for x in 0..1000 {
-    let multipliers_count = max_length / digits_count(x);
+    let multipliers_count = max_length / digits_count(x) + 1;
     let multipliers = 1..multipliers_count;
     let products = multipliers.map(|y| x * y).collect::<Vec<u64>>();
-    println!("=>{}\t\t{}", x, multipliers_count); 
+    let result = join(&products);
+    println!("{} =>({:?}) {}", x, products, result);
+    if digits_count(result) > 9 {
+      continue;
+    }
+    if result > max {
+      max = result;
+    }
   }
+  println!("Max: {}", max);
 }
 
 #[cfg(test)]
@@ -72,6 +67,7 @@ mod tests {
   #[test]
   fn join_works() {
     assert_eq!(123456, join(vec![123,456]));
+    assert_eq!(123456, join(vec![12, 34, 56]));
   }
 
 }
