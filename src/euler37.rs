@@ -14,13 +14,10 @@ extern crate primal;
 
 use self::primal::*;
 
-// TODO: extract as crate
-fn mod_rem(number: usize) -> (usize, usize) {
-  (number / 10, number % 10)
-}
+use utils::mod_rem_10;
 
 fn split (base: usize, remainder: usize, order: usize) -> (usize, usize, usize) {
-  let (m, r) = mod_rem(base);
+  let (m, r) = mod_rem_10(base);
   (m, remainder + order * r, order * 10)
 }
 
@@ -50,12 +47,6 @@ pub fn euler37() {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn mod_rem_works() {
-        assert_eq!((35, 6), mod_rem(356));
-        assert_eq!((0, 6), mod_rem(6));
-    }
 
     #[test]
     fn split_works() {

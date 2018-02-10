@@ -17,32 +17,32 @@ the concatenated product of an integer with (1,2, ... , n) where n > 1?
 
 */
 
-fn multipliers(number:u64, multipliers:Vec<u64>) -> Vec<u64> {
-  multipliers.iter().map(|x| x * number).collect()
-}
+use utils::digits_count;
+use utils::is_pandigital;
 
-fn digits_count(number:u64) -> u64 {
-  return (number as f64).log10().abs() as u64 + 1;
+fn multipliers_count(number:u64, max_length:u64) -> u64 {
+  max_length / digits_count(number) + 1
 }
-
-fn join(products:&Vec<u64>) -> u64 {
-  return products.iter().fold(0, |sum, &x| sum * 10u64.pow(digits_count(x) as u32) + x);
+ 
+fn concatenated_product(number:u64, max_multiplier:u64) -> u64 {
+  (1..max_multiplier + 1)
+    .map(|m| number * m as u64)
+    .fold(0, |sum, x| sum * 10u64.pow(digits_count(x) as u32) + x) 
 }
 
 pub fn euler38() {
   let max_length = 9;
   let mut max = 0;
-  for x in 0..1000 {
-    let multipliers_count = max_length / digits_count(x) + 1;
-    let multipliers = 1..multipliers_count;
-    let products = multipliers.map(|y| x * y).collect::<Vec<u64>>();
-    let result = join(&products);
-    println!("{} =>({:?}) {}", x, products, result);
-    if digits_count(result) > 9 {
-      continue;
-    }
-    if result > max {
-      max = result;
+  for x in 0..10_000+1 {
+    let multipliers_count = multipliers_count(x, max_length);
+    for y in 0..multipliers_count + 1 {
+      let result = concatenated_product(x, y);
+      if digits_count(result) == 9 && is_pandigital(result) {
+        println!("{} -> {} -> {}", x, y, result);
+        if result > max {
+          max = result;
+        }
+      }
     }
   }
   println!("Max: {}", max);
@@ -53,21 +53,8 @@ mod tests {
   use super::*;
 
   #[test]
-  fn multipliers_works() {
-    assert_eq!(vec![2,4,6], multipliers(2, vec![1,2,3]));
+  fn concatenated_product_works() {
+    assert_eq!(192384576, concatenated_product(192, 3));
+    assert_eq!(918273645, concatenated_product(9, 5));    
   }
-
-  #[test]
-  fn digits_count_works() {
-    assert_eq!(1, digits_count(1));
-    assert_eq!(3, digits_count(321));
-    assert_eq!(4, digits_count(1000));
-  }
-
-  #[test]
-  fn join_works() {
-    assert_eq!(123456, join(vec![123,456]));
-    assert_eq!(123456, join(vec![12, 34, 56]));
-  }
-
 }
