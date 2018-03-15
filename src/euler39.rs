@@ -47,6 +47,23 @@ fn build() -> HashMap<u64, Vec<(u64, u64, u64)>> {
   hash_map
 }
 
+fn max(hash_map:HashMap<u64, Vec<(u64, u64, u64)>>) -> u64 {
+  let mut longest:&u64 = &0;
+  let mut longest_key:&u64 = &0;
+  let mut triangles:&Vec<(u64, u64, u64)> = &vec![];
+
+  for (key, value) in hash_map.iter() {
+    println!("{} => {:?}", key, value);
+    let length = value.len() as u64;
+    if length > *longest {
+      longest = length;
+      longest_key = key;
+      triangles = value;
+    }
+  }
+  *longest
+}
+
 #[cfg(test)]
 mod tests {
   use super::*;
