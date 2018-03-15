@@ -29,18 +29,15 @@ pub fn euler39() {
   build();
 }
 
-fn build() -> HashMap<u64, Vec<(u64, u64)>> {
-  let mut hash_map:HashMap<u64, Vec<(u64, u64)>> = HashMap::new();
+fn build() -> HashMap<u64, Vec<(u64, u64, u64)>> {
+  let mut hash_map:HashMap<u64, Vec<(u64, u64, u64)>> = HashMap::new();
   for a in 1..500 {
     for b in 1..500 { // TODO could start from a
         match hypothenuse(a, b) {
           Some(c) => { 
-            let p = a + b + c;
-            let sides = (a, b);
-            match hash_map.get(&p) {
-              Some(vector) => { vector.push(sides) }
-              None => { hash_map.insert(p, vec![(a,b)]); }
-            }
+            hash_map
+              .entry(a + b + c).or_insert(vec![])
+              .push((a, b, c));            
           }
           None => { }
         }      
@@ -59,4 +56,19 @@ mod tests {
     assert_eq!(Some(5), hypothenuse(3, 4));
     assert_eq!(None, hypothenuse(3, 5));
   }
+  
+  // #[test]
+  // fn try_problem() {
+  //   let mut hash_map:HashMap<u64, Vec<(u64, u64)>> = HashMap::new();
+  //   match hash_map.get(&3) {
+  //      Some(vector) => { vector.push((1,2)) }
+  //      None => { hash_map.insert(2, vec![(1,2)]); }
+  //   }
+  // }
+
+  // #[test]
+  // fn try_problem_fixed() {
+  //   let mut hash_map:HashMap<u64, Vec<(u64, u64)>> = HashMap::new();
+  //   hash_map.entry(3).or_insert(vec![]).push((1,2))
+  // }
 }
