@@ -16,6 +16,12 @@
 
 use std::collections::HashMap;
 
+pub fn euler39() {
+  let hash_map = build();
+  let max_key = max(hash_map);
+  println!("Max key: {}", max_key);
+}
+
 fn hypothenuse(a:u64, b:u64) -> Option<u64> {
   let sqrt = ((a*a + b*b) as f64).sqrt();
   if (sqrt - (sqrt as u64) as f64).abs() > 0. {
@@ -25,9 +31,6 @@ fn hypothenuse(a:u64, b:u64) -> Option<u64> {
   }
 }
 
-pub fn euler39() {
-  build();
-}
 
 fn build() -> HashMap<u64, Vec<(u64, u64, u64)>> {
   let mut hash_map:HashMap<u64, Vec<(u64, u64, u64)>> = HashMap::new();
@@ -48,20 +51,18 @@ fn build() -> HashMap<u64, Vec<(u64, u64, u64)>> {
 }
 
 fn max(hash_map:HashMap<u64, Vec<(u64, u64, u64)>>) -> u64 {
-  let mut longest:&u64 = &0;
-  let mut longest_key:&u64 = &0;
-  let mut triangles:&Vec<(u64, u64, u64)> = &vec![];
+  let mut longest:u64 = 0;
+  let mut longest_key:u64 = 0;
 
   for (key, value) in hash_map.iter() {
     println!("{} => {:?}", key, value);
     let length = value.len() as u64;
-    if length > *longest {
+    if length > longest {
       longest = length;
-      longest_key = key;
-      triangles = value;
+      longest_key = key.to_owned();
     }
   }
-  *longest
+  longest_key
 }
 
 #[cfg(test)]
